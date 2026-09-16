@@ -1,0 +1,20 @@
+{
+    "attendance_events": [
+        {
+            "stadium_id": "STAD-1",
+            "attendance": 24131,
+            "capacity": 58385,
+            "timestamp": "2026-09-17T11:56:45Z"
+        }
+    ],
+    "ticket_sales_events": [
+        {
+            "stadium_id": "STAD-1",
+            "tickets_sold": 7,
+            "ticket_price": 134,
+            "timestamp": "2026-09-12T14:14:36Z"
+        }
+    ],
+    "num_attendance_events": 1,
+    "num_ticket_sales_events": 1
+}

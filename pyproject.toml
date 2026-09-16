@@ -1,0 +1,19 @@
+[project]
+name = "api-arc"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Leo Saito", email = "leohsaito@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "connexion[swagger-ui,uvicorn]>=3.3.0",
+]
+
+[project.scripts]
+api-arc = "api_arc:main"
+
+[build-system]
+requires = ["uv_build>=0.12.15,<0.13.0"]
+build-backend = "uv_build"

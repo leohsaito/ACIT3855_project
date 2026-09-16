@@ -1,0 +1,3 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1789545518070,25,Attendance Event,201,Created,Thread Group 1-1,text,true,,129,301,1,1,http://127.0.0.1:8080/stadiums/attendance,23,0,13
+1789545518097,7,Ticket Sale Event,201,Created,Thread Group 1-1,text,true,,129,303,1,1,http://127.0.0.1:8080/stadiums/ticket-sales,7,0,0

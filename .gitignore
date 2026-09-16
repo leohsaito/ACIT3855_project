@@ -1,0 +1,13 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+apache-jmeter-5.6.3/
+report/
+results.jtl
+
+# Virtual environments
+.venv/

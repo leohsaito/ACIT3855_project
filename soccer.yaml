@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: Soccer League API
+  version: "1"
+  description: >
+    Receives stadium attendance and ticket sales events
+    from soccer stadiums in the league
+paths:
+  /stadiums/attendance:
+    post:
+      summary: Receive a stadium attendance event
+      description: Records the current attendance at a stadium.
+      operationId: receiver.record_attendance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceEvent'
+      responses:
+        '201':
+          description: Attendance event successfully received
+        '400':
+          description: Invalid attendance event
+  /stadiums/ticket-sales:
+    post:
+      summary: Receive a ticket sales event
+      description: Records a ticket sales transaction for a stadium.
+      operationId: receiver.record_ticket_sale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketSaleEvent'
+      responses:
+        '201':
+          description: Ticket sales event successfully received
+        '400':
+          description: Invalid ticket sales event
+components:
+  schemas:
+    AttendanceEvent:
+      type: object
+      additionalProperties: false
+      required:
+        - stadium_id
+        - attendance
+        - capacity
+        - timestamp
+      properties:
+        stadium_id:
+          type: string
+          example: "STAD-001"
+        attendance:
+          type: integer
+          minimum: 0
+          example: 32500
+        capacity:
+          type: integer
+          minimum: 1
+          example: 40000
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-09-15T19:30:00Z"
+    TicketSaleEvent:
+      type: object
+      additionalProperties: false
+      required:
+        - stadium_id
+        - tickets_sold
+        - ticket_price
+        - timestamp
+      properties:
+        stadium_id:
+          type: string
+          example: "STAD-001"
+        tickets_sold:
+          type: integer
+          minimum: 1
+          example: 4
+        ticket_price:
+          type: number
+          format: float
+          minimum: 0
+          example: 75.00
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-09-15T14:25:00Z"
+          
