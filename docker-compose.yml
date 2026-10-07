@@ -1,0 +1,10 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_USER: soccer_user
+      MYSQL_PASSWORD: soccer_password
+      MYSQL_DATABASE: soccer_events
+    ports:
+      - "3306:3306"
