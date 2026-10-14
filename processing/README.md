@@ -224,7 +224,8 @@ To reset only the processing state:
 docker compose stop processing
 docker compose rm -f processing
 docker volume ls
-docker volume rm apiarc_processing_data
+docker volume rm apiarc_processing_data 
+# For laptop use: docker volume rm acit3855_project_processing_data
 docker compose up -d processing
 ```
 
