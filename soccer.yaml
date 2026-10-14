@@ -38,6 +38,13 @@ paths:
           description: Ticket sales event successfully received
         '400':
           description: Invalid ticket sales event
+  /status:
+    get:
+      summary: Check receiver service status
+      operationId: receiver.get_status
+      responses:
+        '200':
+          description: Receiver service is running
 components:
   schemas:
     AttendanceEvent:

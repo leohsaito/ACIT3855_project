@@ -1,10 +1,101 @@
 services:
+
   db:
-    image: mysql:8.4
+    image: mysql:8
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: soccer_events
       MYSQL_USER: soccer_user
       MYSQL_PASSWORD: soccer_password
-      MYSQL_DATABASE: soccer_events
+      TZ: America/Vancouver
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-usoccer_user",
+          "-psoccer_password"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  storage:
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+
+    environment:
+      DATABASE_URL: mysql+pymysql://soccer_user:soccer_password@db:3306/soccer_events
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/status"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+
+
+  receiver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      STORAGE_URL: http://storage:8090
+
+    depends_on:
+      storage:
+        condition: service_healthy
+
     ports:
-      - "3306:3306"
+      - "8080:8080"
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/status"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+
+
+  processing:
+    build:
+      context: ./processing
+      dockerfile: Dockerfile
+
+    environment:
+      STORAGE_URL: http://storage:8090
+      POLL_INTERVAL: "5"
+      STATS_FILE: /data/statistics.json
+
+    volumes:
+      - processing_data:/data
+
+    depends_on:
+      storage:
+        condition: service_healthy
+
+    ports:
+      - "8100:8100"
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/status"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+
+
+volumes:
+  mysql_data:
+  processing_data:

@@ -1,0 +1,72 @@
+openapi: 3.0.3
+
+info:
+  title: Soccer League Processing API
+  version: "1.0.0"
+  description: Provides aggregate statistics for soccer stadium events
+
+paths:
+
+  /stats:
+    get:
+      summary: Get soccer league event statistics
+      operationId: processing.get_stats
+      responses:
+        '200':
+          description: Current aggregate statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessingStats'
+
+  /status:
+    get:
+      summary: Check processing service status
+      operationId: processing.get_status
+      responses:
+        '200':
+          description: Processing service is running
+
+components:
+
+  schemas:
+
+    ProcessingStats:
+      type: object
+      additionalProperties: false
+      required:
+        - total_attendance_events
+        - total_ticket_sale_events
+        - max_attendance
+        - total_ticket_revenue
+        - last_attendance_updated
+        - last_ticket_sale_updated
+
+      properties:
+
+        total_attendance_events:
+          type: integer
+          example: 100
+
+        total_ticket_sale_events:
+          type: integer
+          example: 100
+
+        max_attendance:
+          type: integer
+          example: 48500
+
+        total_ticket_revenue:
+          type: number
+          format: float
+          example: 175250.00
+
+        last_attendance_updated:
+          type: string
+          format: date-time
+          nullable: true
+
+        last_ticket_sale_updated:
+          type: string
+          format: date-time
+          nullable: true

@@ -5,13 +5,20 @@ import logging
 import logging.config
 import yaml
 from connexion import NoContent
+import os
 
-STORAGE_URL = "http://127.0.0.1:8090"
+STORAGE_URL = os.getenv(
+    "STORAGE_URL",
+    "http://127.0.0.1:8090"
+)
 
 with open("log_conf.yml", "r") as f:
     LOG_CONFIG = yaml.safe_load(f)
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger("receiver")
+
+def get_status():
+    return {"status": "running"}, 200
 
 def record_attendance(body):
     try:

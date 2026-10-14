@@ -1,0 +1,11 @@
+.venv
+**/.venv
+.git
+__pycache__
+**/__pycache__
+*.pyc
+*.log
+*.jtl
+report
+apache-jmeter-5.6.3
+storage

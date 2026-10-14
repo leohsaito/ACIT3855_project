@@ -23,4 +23,5 @@ build-backend = "uv_build"
 [tool.uv.workspace]
 members = [
     "storage",
+    "processing",
 ]
