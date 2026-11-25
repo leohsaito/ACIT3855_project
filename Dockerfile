@@ -24,4 +24,4 @@ COPY log_conf.yml .
 
 EXPOSE 8080
 
-CMD ["uvicorn", "receiver:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "receiver:app", "--host", "0.0.0.0", "--port", "8080", "--root-path", "/receiver", "--proxy-headers"]

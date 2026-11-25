@@ -173,16 +173,13 @@ async def update_statistics(client, stats, lock):
     )
 
 
-async def update_loop():
+async def update_loop(client, stats, lock):
     while True:
         try:
-            await update_statistics()
-
-        except httpx.HTTPError as exc:
-            logger.warning(
-                "Storage unavailable. "
-                "Skipping statistics update: %s",
-                exc
+            await update_statistics(
+                client,
+                stats,
+                lock
             )
 
         except Exception:

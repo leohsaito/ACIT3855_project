@@ -1,0 +1,36 @@
+:80 {
+
+    redir /receiver /receiver/ 308
+    handle_path /receiver/* {
+        reverse_proxy receiver:8080
+    }
+
+    redir /storage /storage/ 308
+    handle_path /storage/* {
+        reverse_proxy storage:8090
+    }
+
+    redir /processing /processing/ 308
+    handle_path /processing/* {
+        reverse_proxy processing:8100
+    }
+
+    redir /grafana /grafana/ 308
+    handle /grafana/* {
+        reverse_proxy grafana:3000
+    }
+
+    redir /redpanda /redpanda/ 308
+    handle /redpanda/* {
+        reverse_proxy redpanda-console:8080
+    }
+
+    redir /prometheus /prometheus/ 308
+    handle /prometheus/* {
+        reverse_proxy prometheus:9090
+    }
+
+    handle {
+        respond "ACIT 3855 Soccer Platform" 200
+    }
+}

@@ -23,4 +23,4 @@ COPY log_conf.yml .
 
 EXPOSE 8090
 
-CMD ["sh", "-c", "python create_tables.py && uvicorn storage:app --host 0.0.0.0 --port 8090"]
+CMD ["sh", "-c", "python create_tables.py && uvicorn storage:app --host 0.0.0.0 --port 8090 --root-path /storage --proxy-headers"]
