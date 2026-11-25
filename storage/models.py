@@ -13,7 +13,11 @@ class Attendance(Base):
     __tablename__ = "attendance"
 
     id = mapped_column(Integer, primary_key=True)
-    trace_id = mapped_column(BigInteger, nullable=False)
+    trace_id = mapped_column(
+        BigInteger,
+        unique=True,
+        nullable=False
+    )
     stadium_id = mapped_column(String(50), nullable=False)
     attendance = mapped_column(Integer, nullable=False)
     capacity = mapped_column(Integer, nullable=False)
@@ -44,7 +48,11 @@ class TicketSale(Base):
     __tablename__ = "ticket_sale"
 
     id = mapped_column(Integer, primary_key=True)
-    trace_id = mapped_column(BigInteger, nullable=False)
+    trace_id = mapped_column(
+        BigInteger,
+        unique=True,
+        nullable=False
+    )
     stadium_id = mapped_column(String(50), nullable=False)
     tickets_sold = mapped_column(Integer, nullable=False)
     ticket_price = mapped_column(Float, nullable=False)

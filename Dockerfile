@@ -12,6 +12,12 @@ RUN pip install --no-cache-dir \
     requests \
     pyyaml
 
+RUN pip install --no-cache-dir \
+    "connexion[uvicorn]" \
+    "connexion[swagger-ui]" \
+    aiokafka \
+    pyyaml
+
 COPY receiver.py .
 COPY soccer.yaml .
 COPY log_conf.yml .

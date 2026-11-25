@@ -3,8 +3,8 @@ info:
   title: Soccer League API
   version: "1"
   description: >
-    Receives stadium attendance and ticket sales events
-    from soccer stadiums in the league
+    Provides access to stored stadium attendance and ticket sales events
+    for the soccer league platform.
 paths:
   /stadiums/attendance:
     get:
@@ -28,21 +28,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/AttendanceEvent'
-    post:
-      summary: Receive a stadium attendance event
-      description: Records the current attendance at a stadium.
-      operationId: storage.store_attendance
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AttendanceEvent'
-      responses:
-        '201':
-          description: Attendance event successfully received
-        '400':
-          description: Invalid attendance event
+
   /stadiums/ticket-sales:
     get:
       summary: Get ticket sale events
@@ -65,21 +51,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TicketSaleEvent'
-    post:
-      summary: Receive a ticket sales event
-      description: Records a ticket sales transaction for a stadium.
-      operationId: storage.store_ticket_sale
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TicketSaleEvent'
-      responses:
-        '201':
-          description: Ticket sales event successfully received
-        '400':
-          description: Invalid ticket sales event
+
   /status:
     get:
       summary: Check storage service status
@@ -107,6 +79,7 @@ paths:
                     example: 25
         '500':
           description: Storage service is not operating correctly
+
   /reset:
     post:
       summary: Reset the storage database

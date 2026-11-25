@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
+    "aiokafka>=0.15.0",
     "connexion[swagger-ui,uvicorn]>=3.3.0",
     "pyyaml>=6.0.3",
     "requests>=2.34.2",

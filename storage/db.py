@@ -8,7 +8,10 @@ DATABASE_URL = os.getenv(
     "mysql+pymysql://soccer_user:soccer_password@127.0.0.1:3306/soccer_events"
 )
 
-ENGINE = create_engine(DATABASE_URL)
+ENGINE = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True
+)
 
 Session = sessionmaker(bind=ENGINE)
 

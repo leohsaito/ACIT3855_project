@@ -4,6 +4,7 @@ import yaml
 import connexion
 
 from sqlalchemy import select, func
+from sqlalchemy.exc import OperationalError
 from connexion import NoContent
 from datetime import datetime
 from db import make_session, ENGINE
@@ -68,73 +69,6 @@ def reset_database():
             "message": "Database reset failed"
         }, 500
 
-def store_attendance(body):
-    session = make_session()
-
-    try:
-        event = Attendance(
-            trace_id=body["trace_id"],
-            stadium_id=body["stadium_id"],
-            attendance=body["attendance"],
-            capacity=body["capacity"],
-            timestamp=parse_timestamp(body["timestamp"])
-        )
-
-        session.add(event)
-        session.commit()
-
-    except Exception:
-        session.rollback()
-        logger.exception(
-            "Failed to store attendance event | trace_id: %s",
-            body.get("trace_id")
-        )
-        raise
-
-    finally:
-        session.close()
-
-    logger.debug(
-        "Stored attendance event with trace_id: %s",
-        body["trace_id"]
-    )
-
-    return NoContent, 201
-
-
-def store_ticket_sale(body):
-    session = make_session()
-
-    try:
-        event = TicketSale(
-            trace_id=body["trace_id"],
-            stadium_id=body["stadium_id"],
-            tickets_sold=body["tickets_sold"],
-            ticket_price=body["ticket_price"],
-            timestamp=parse_timestamp(body["timestamp"])
-        )
-
-        session.add(event)
-        session.commit()
-
-    except Exception:
-        session.rollback()
-        logger.exception(
-            "Failed to store attendance event | trace_id: %s",
-            body.get("trace_id")
-        )
-        raise
-
-    finally:
-        session.close()
-
-    logger.debug(
-        "Stored ticket sale event with trace_id: %s",
-        body["trace_id"]
-    )
-
-    return NoContent, 201
-
 def get_attendance_events(after=None):
     session = make_session()
 
@@ -143,19 +77,26 @@ def get_attendance_events(after=None):
 
         if after:
             after_dt = parse_timestamp(after)
+
             query = query.where(
                 Attendance.recorded_timestamp > after_dt
             )
 
         events = session.scalars(query).all()
 
-        logger.debug(
-            "Found %d attendance events after %s",
-            len(events),
-            after
+        return [
+            event.to_json()
+            for event in events
+        ], 200
+
+    except OperationalError:
+        logger.warning(
+            "Database unavailable for attendance GET"
         )
 
-        return [event.to_json() for event in events], 200
+        return {
+            "error": "database temporarily unavailable"
+        }, 503
 
     finally:
         session.close()
@@ -181,7 +122,16 @@ def get_ticket_sale_events(after=None):
         )
 
         return [event.to_json() for event in events], 200
+    
+    except OperationalError:
+        logger.warning(
+            "Database unavailable for attendance GET"
+        )
 
+        return {
+            "error": "database temporarily unavailable"
+        }, 503
+    
     finally:
         session.close()
 

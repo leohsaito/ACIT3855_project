@@ -56,6 +56,7 @@ def load_stats():
     if not STATS_FILE.exists():
         return DEFAULT_STATS.copy()
 
+    # error handling
     with STATS_FILE.open("r") as f:
         return json.load(f)
 
@@ -172,23 +173,22 @@ async def update_statistics(client, stats, lock):
     )
 
 
-async def update_loop(client, stats, lock):
+async def update_loop():
     while True:
         try:
-            await update_statistics(
-                client,
-                stats,
-                lock
-            )
+            await update_statistics()
 
-        except httpx.HTTPError:
-            logger.exception(
-                "Unable to retrieve events from storage."
+        except httpx.HTTPError as exc:
+            logger.warning(
+                "Storage unavailable. "
+                "Skipping statistics update: %s",
+                exc
             )
 
         except Exception:
             logger.exception(
-                "Unexpected processing error."
+                "Statistics update failed. "
+                "Keeping existing statistics."
             )
 
         await asyncio.sleep(POLL_INTERVAL)

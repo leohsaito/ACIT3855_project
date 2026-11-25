@@ -1,0 +1,16 @@
+FROM python:3.13-slim
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir \
+    sqlalchemy \
+    pymysql \
+    confluent-kafka \
+    pyyaml
+
+COPY storage_worker.py .
+COPY db.py .
+COPY models.py .
+COPY log_conf.yml .
+
+CMD ["python", "storage_worker.py"]
